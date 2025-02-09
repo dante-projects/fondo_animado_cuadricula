@@ -1,7 +1,22 @@
+import {crearElemento} from "./modulos/crearElemento.js"
+
 const itemSize = 60
 const contenedorFondo = document.getElementById("contenedorFondo")
 const ancho = document.body.getBoundingClientRect().width
 const alto = document.body.getBoundingClientRect().height
+const configuracionInputs = [
+    [
+        { funcion: "Tamaño cuadrícula", elemento: "input", type: "range", min: 20, max: 200, value: 60 },
+        { funcion: "Tamaño elemento", elemento: "input", type: "range", min: 50, max: 100, value: 70 },
+        { funcion: "Grosor del borde", elemento: "input", type: "range", min: 20, max: 200, value: 50 },
+    ],
+    [
+        { funcion: "", tipo: "range", min: 20, max: 200, value: 50 },
+        { funcion: "Tamaño Cuadrícula", tipo: "range", min: 20, max: 200, value: 50 },
+        { funcion: "Tamaño Cuadrícula", tipo: "range", min: 20, max: 200, value: 50 },
+    ]
+]
+
 
 function calcularNumItems() {
     const itemsFila = Math.floor(ancho / itemSize)
@@ -65,7 +80,32 @@ function darEstilos() {
     document.head.appendChild(estilo)
 }
 
+const seleccionFondo = Array.from(document.querySelectorAll("#seleccionFondo li .inputOculto"))
+function dibujarControles(item) {
+    const controles = document.getElementById("controles")
+    const num = seleccionFondo.indexOf(item)
+    configuracionInputs[num].forEach((item) => {
+        const itemConfiguracion = crearElemento(controles, "div", "bloquesConfiguracion")
+        itemConfiguracion.innerText = item.funcion
+        const inputBloque = crearElemento (itemConfiguracion, "div", "bloqueInput")
+        const input = crearElemento (inputBloque, item.elemento)
+        const valor = crearElemento (inputBloque, "span", "borderRadiusGrey flexCentrado")
+        
+        Object.entries(item).forEach(([key, valor]) => {
+            if (key !== "funcion" && key !== "elemento") {
+                input.setAttribute(key, valor)
+            }
+        })
+    })
+}
+
+function escribirValores() {
+    const cajasValores = 0 
+
+}
+
 function main() {
+    dibujarControles(seleccionFondo[0])
     dibujarCuadricula()
     darEstilos()
 }

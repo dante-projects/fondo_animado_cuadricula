@@ -1,10 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Anta&family=Orbitron');
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    list-style: none;
+    font-size: 14px;
 }
 
+:root {
+    --transicion: 1s ease-in-out;
+    --interruptorSize: 30px;
+    --borderRadius: 4px;
+    --colorEnfasis: rgb(160, 199, 206);
+    --blancoTransludico: rgb(255, 255, 255, .2);
+    --negroTranslucido: rgba(0, 0, 0, 0.4);
+}
+
+/* clases predefinidas */
+.inputOculto {
+    position: absolute;
+    appearance: none;
+    width:100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.borderRadiusGrey {
+    border: 1px solid grey;
+    border-radius: var(--borderRadius);
+} 
+
+.flexCentrado {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+/* fin de clases predefinisda */
+
 body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     width: 100vw;
     height: 100vh;
     background-color: rgb(8, 8, 29);
@@ -14,6 +52,119 @@ body {
     .contenedorFondo {
         position: absolute;
         width: 100vw;
-        height: 100vh;
+    }
+
+    .panelConfiguracion {
+        position: absolute;
+        left: -300px;
+        width: 300px;
+        height: 80vh;
+        background-color: var(--negroTranslucido);
+        backdrop-filter: blur(4px);
+        border-left: none;
+        padding: 20px;
+        transition: var(--transicion);
+
+        form {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            font-family: "orbitron";
+            color: grey;
+
+            .bloquesConfiguracion {
+                margin-bottom: 20px;
+                width: 100%;
+                height: 80px;
+
+                .bloqueInput{
+                    display: flex;
+                    justify-content: space-between;
+                    width: 100%;
+                    height: 50px;
+
+                    input {
+                        width: calc(100% - 70px);
+                    }
+
+                    span {
+                        display: flex;
+                        height: 100%;
+                        aspect-ratio: 1/1;
+                    }
+                }
+            }
+        }
+
+        .interruptor {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            right: -50px;
+            width: var(--interruptorSize);
+            aspect-ratio: 1/4;
+            font-family: "orbitron";
+            font-weight: bold;
+            writing-mode: vertical-lr;
+            color: var(--colorEnfasis);
+            background-color: var(--blancoTransludico);
+            letter-spacing: 4px;
+            transition: var(--transicion);
+
+            input {
+                position: absolute;
+                appearance: none;
+                width: 100%;
+                height: 100%;
+                cursor: pointer;
+            }
+        }
+    }
+
+    .panelConfiguracion:has(.interruptor input:checked) {
+        left: 0;
+
+        .interruptor {
+            top: calc(100% - var(--interruptorSize) * 4 + 1px);
+            background-color: var(--negroTranslucido);
+        }
+    }
+
+    .seleccionFondo {
+        position: absolute;
+        bottom: 0;
+        padding: 10px 20px;
+
+        .listaFondos {
+            display: flex;
+            width: 100%;
+            height: 100%;
+
+            li {
+                position: relative;
+                width: var(--interruptorSize);
+                height: var(--interruptorSize);
+                margin: 6px;
+                background-color: var(--blancoTransludico);
+                backdrop-filter: blur(4px);
+                font-family: "orbitron";
+                font-weight: bolder;
+                color: var(--colorEnfasis);
+                transition: .4s;
+
+                &:has(.inputOculto:hover) {
+                    background-color: var(--negroTranslucido);
+                }
+
+                &:has(.inputOculto:checked) {
+                    width: 200px;
+                    background-color: var(--negroTranslucido);
+                }
+            }
+        }
     }
 }
