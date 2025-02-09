@@ -6,6 +6,7 @@
     box-sizing: border-box;
     list-style: none;
     font-size: 14px;
+    user-select: none;
 }
 
 :root {
@@ -27,7 +28,7 @@
 }
 
 .borderRadiusGrey {
-    border: 1px solid grey;
+    border: 1px solid rgba(128, 128, 128, 0.2);
     border-radius: var(--borderRadius);
 } 
 
@@ -82,17 +83,19 @@ body {
                 .bloqueInput{
                     display: flex;
                     justify-content: space-between;
+                    align-items: center;
                     width: 100%;
                     height: 50px;
 
                     input {
-                        width: calc(100% - 70px);
+                        width: calc(100% - 65px);
                     }
 
                     span {
                         display: flex;
-                        height: 100%;
+                        height: 80%;
                         aspect-ratio: 1/1;
+                        transition: .4s;
                     }
                 }
             }
