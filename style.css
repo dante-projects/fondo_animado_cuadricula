@@ -5,13 +5,15 @@
     padding: 0;
     box-sizing: border-box;
     list-style: none;
-    font-size: 14px;
+    font-family: "orbitron";
+    font-size: 10px;
+    letter-spacing: 2px;
     user-select: none;
 }
 
 :root {
     --transicion: 1s ease-in-out;
-    --interruptorSize: 30px;
+    --cuadrado: 32px;
     --borderRadius: 4px;
     --colorEnfasis: rgb(160, 199, 206);
     --blancoTransludico: rgb(255, 255, 255, .2);
@@ -59,43 +61,84 @@ body {
         position: absolute;
         left: -300px;
         width: 300px;
-        height: 80vh;
+        height: calc(100% - 30px);
         background-color: var(--negroTranslucido);
         backdrop-filter: blur(4px);
         border-left: none;
         padding: 20px;
         transition: var(--transicion);
 
+        .tituloConfiguracion {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            height: 30px;
+            font-size: 2rem;
+            color: grey;  
+            margin-bottom: 30px;
+        }
+
         form {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             flex-direction: column;
             width: 100%;
-            height: 100%;
-            font-family: "orbitron";
+            height: calc(100% - 60px); /* titulo + margen */
             color: grey;
 
-            .bloquesConfiguracion {
-                margin-bottom: 20px;
+            .rangos {
+                display: flex;
+                align-items: center;
+                flex-direction: column;
                 width: 100%;
-                height: 80px;
+                height: calc(100% - 30px); /* altura de radios */
+                overflow-y: auto;
 
-                .bloqueInput{
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
+
+                .bloquesConfiguracion {
                     width: 100%;
-                    height: 50px;
-
-                    input {
-                        width: calc(100% - 65px);
-                    }
-
-                    span {
+                    height: 80px;
+    
+                    .bloqueInput{
                         display: flex;
-                        height: 80%;
-                        aspect-ratio: 1/1;
-                        transition: .4s;
+                        justify-content: space-between;
+                        align-items: center;
+                        width: 100%;
+                        height: 50px;
+    
+                        input {
+                            width: calc(100% - 65px);
+                        }
+    
+                        .campoValor {
+                            display: flex;
+                            width: calc(var(--cuadrado) + 10px);
+                            height: var(--cuadrado);
+                            transition: .4s;
+                        }
+                    }
+                }
+            }
+
+            .radios {
+                width: 100%;
+                height: 30px;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+
+                .preset {
+                    appearance:  none;
+                    height: 50%;
+                    aspect-ratio: 1/1;
+                    cursor: pointer;
+                    border: 1px solid rgba(128, 128, 128, 0.2);
+                    border-radius: 50%;
+
+                    &:checked {
+                        border-color: var(--colorEnfasis);
+                        background-color: var(--colorEnfasis);
                     }
                 }
             }
@@ -107,10 +150,9 @@ body {
             align-items: center;
             position: absolute;
             top: 0;
-            right: -50px;
-            width: var(--interruptorSize);
+            right: -40px;
+            width: var(--cuadrado);
             aspect-ratio: 1/4;
-            font-family: "orbitron";
             font-weight: bold;
             writing-mode: vertical-lr;
             color: var(--colorEnfasis);
@@ -132,7 +174,7 @@ body {
         left: 0;
 
         .interruptor {
-            top: calc(100% - var(--interruptorSize) * 4 + 1px);
+            top: calc(100% - var(--cuadrado) * 4 + 1px);
             background-color: var(--negroTranslucido);
         }
     }
@@ -149,12 +191,11 @@ body {
 
             li {
                 position: relative;
-                width: var(--interruptorSize);
-                height: var(--interruptorSize);
+                width: var(--cuadrado);
+                height: var(--cuadrado);
                 margin: 6px;
                 background-color: var(--blancoTransludico);
                 backdrop-filter: blur(4px);
-                font-family: "orbitron";
                 font-weight: bolder;
                 color: var(--colorEnfasis);
                 transition: .4s;

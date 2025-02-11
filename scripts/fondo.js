@@ -5,15 +5,75 @@ const ancho = document.body.getBoundingClientRect().width
 const alto = document.body.getBoundingClientRect().height
 const configuracionInputs = [
     [
-        { funcion: "Tamaño cuadrícula", elemento: "input", type: "range", min: 20, max: 100, value: 60 },
-        { funcion: "Tamaño elemento", elemento: "input", type: "range", min: 1, max: 100, value: 70 },
-        { funcion: "Grosor del borde", elemento: "input", type: "range", min: 0, max: 20, value: 1 },
-        { funcion: "Redondeo", elemento: "input", type: "range", min: 0, max: 50, value: 20 },
-        { funcion: "Desenfoque", elemento: "input", type: "range", min: 0, max: 20, value: 4 },
-        { funcion: "Transparencia", elemento: "input", type: "range", min: 0, max: 100, value: 40 }
+        { funcion: "Tamaño cuadrícula", elemento: "input", type: "range" },
+        { funcion: "Tamaño elemento", elemento: "input", type: "range" },
+        { funcion: "Grosor del borde", elemento: "input", type: "range", },
+        { funcion: "Redondeo", elemento: "input", type: "range" },
+        { funcion: "Desenfoque", elemento: "input", type: "range" },
+        { funcion: "Transparencia", elemento: "input", type: "range" },
+        { preset: "preset1", elemento: "input", type: "radio", name: "fondo1", checked: true },
+        { preset: "preset2", elemento: "input", type: "radio", name: "fondo1" },
+        { preset: "preset3", elemento: "input", type: "radio", name: "fondo1" },
+        { preset: "preset4", elemento: "input", type: "radio", name: "fondo1" },
+        { preset: "preset5", elemento: "input", type: "radio", name: "fondo1" },
+        { preset: "preset5", elemento: "input", type: "radio", name: "fondo1" },
+
     ]
 ]
 
+const presets = {
+    fondo1: [
+        [
+            { min: 20, max: 100, value: 60 },
+            { min: 1, max: 100, value: 70 },
+            { min: 0, max: 20, value: 1 },
+            { min: 0, max: 50, value: 20 },
+            { min: 0, max: 20, value: 4 },
+            { min: 0, max: 100, value: 40 }
+        ],
+        [
+            { min: 20, max: 100, value: 1 },
+            { min: 1, max: 100, value: 1 },
+            { min: 0, max: 20, value: 1 },
+            { min: 0, max: 50, value: 1 },
+            { min: 0, max: 20, value: 1 },
+            { min: 0, max: 100, value: 1 }
+        ],
+        [
+            { min: 20, max: 100, value: 2 },
+            { min: 1, max: 100, value: 2 },
+            { min: 0, max: 20, value: 2 },
+            { min: 0, max: 50, value: 2 },
+            { min: 0, max: 20, value: 2 },
+            { min: 0, max: 100, value: 2 }
+        ],
+        [
+            { min: 20, max: 100, value: 3 },
+            { min: 1, max: 100, value: 3 },
+            { min: 0, max: 20, value: 3 },
+            { min: 0, max: 50, value: 3 },
+            { min: 0, max: 20, value: 3 },
+            { min: 0, max: 100, value: 3 }
+        ],
+        [
+            { min: 20, max: 100, value: 4 },
+            { min: 1, max: 100, value: 4 },
+            { min: 0, max: 20, value: 4 },
+            { min: 0, max: 50, value: 4 },
+            { min: 0, max: 20, value: 4 },
+            { min: 0, max: 100, value: 4 }
+        ],
+        [
+            { min: 20, max: 100, value: 5 },
+            { min: 1, max: 100, value: 5 },
+            { min: 0, max: 20, value: 5 },
+            { min: 0, max: 50, value: 5 },
+            { min: 0, max: 20, value: 5 },
+            { min: 0, max: 100, value: 5 }
+        ],
+
+    ]
+}
 
 function calcularNumItems() {
     const itemsFila = Math.floor(ancho / valores[0])
@@ -87,32 +147,42 @@ function darEstilos() {
 }
 
 const seleccionFondo = Array.from(document.querySelectorAll("#seleccionFondo li .inputOculto"))
+const controles = document.getElementById("controles")
 function dibujarControles(par) {
-    const controles = document.getElementById("controles")
+    const rangos = crearElemento(controles, "div", "rangos")
+    const radios = crearElemento(controles, "div", "radios borderRadiusGrey")
+
     const num = seleccionFondo.indexOf(par)
     configuracionInputs[num].forEach((item) => {
 
-        const itemConfiguracion = crearElemento(controles, "div", "bloquesConfiguracion")
-        itemConfiguracion.innerText = item.funcion
-        const inputBloque = crearElemento(itemConfiguracion, "div", "bloqueInput")
-        const input = crearElemento(inputBloque, item.elemento)
-        crearElemento(inputBloque, "span", "borderRadiusGrey flexCentrado")
+        let input
+        if (item.funcion) {
+            const itemConfiguracion = crearElemento(rangos, "div", "bloquesConfiguracion")
+            itemConfiguracion.innerText = item.funcion
+            const inputBloque = crearElemento(itemConfiguracion, "div", "bloqueInput")
+            input = crearElemento(inputBloque, item.elemento)
+            crearElemento(inputBloque, "span", "campoValor borderRadiusGrey flexCentrado")
+        }
 
-        Object.entries(item).forEach(([key, valor]) => {
+        if (item.preset) {
+            input = crearElemento(radios, item.elemento, "preset borderGrey")
+        }
+
+        Object.entries(item).forEach(([key, value]) => {
             if (key !== "funcion" && key !== "elemento") {
-                input.setAttribute(key, valor)
+                input.setAttribute(key, value)
             }
         })
     })
 }
 
-function identificarInputs() {
-    return Array.from(document.querySelectorAll("#controles input[type='range'"))
+function buscarArray(contenedor, selector) {
+    return Array.from(contenedor.querySelectorAll(selector))
 }
 
 let valores = []
 function recogerValores() {
-    const inputs = identificarInputs()
+    const inputs = buscarArray(controles, "input[type='range']")
     valores = []
     inputs.forEach((item) => {
         valores.push(item.value)
@@ -122,35 +192,61 @@ function recogerValores() {
 function escribirValores(input = null) {
     let elemento
     if (input) {
-        const posicion = identificarInputs().indexOf(input)
+        const posicion = buscarArray(controles, "input[type='range']").indexOf(input)
         input.nextElementSibling.innerText = valores[posicion]
     } else {
-        elemento = identificarInputs()
+        elemento = buscarArray(controles, "input[type='range']")
         elemento.forEach((item, num) => {
             item.nextElementSibling.innerText = valores[num]
         })
     }
 }
 
+function cambiarPreset(item = null, num = null) {
+    let radio = item ? item : 0
+    const presetSeleccionado = buscarArray(controles, "input[type='radio']").find(item => item.checked === true)
+    const index = num ? num : buscarArray(controles, "input[type='radio']").findIndex(item => item.checked === true)
+    valores = []
+
+    buscarArray(controles, "input[type = 'range']").forEach((rango, num) => {
+        const configuracion = Object.entries(presets[presetSeleccionado.name][index][num])
+        configuracion.forEach(([clave, valor]) => {
+            rango.setAttribute(clave, valor)
+            if (clave === "value") {
+                valores.push(valor)
+            }
+        })
+    })
+}
+
 function main() {
     dibujarControles(seleccionFondo[0])
+    cambiarPreset()
     recogerValores()
     escribirValores()
-    dibujarCuadricula()
-    darEstilos()
 
-    identificarInputs().forEach((item) => {
+    /*     dibujarCuadricula()
+        darEstilos()
+     */
+    buscarArray(controles, "input[type='range']").forEach((item) => {
         item.addEventListener("input", () => {
             recogerValores()
             escribirValores(item)
-            dibujarCuadricula()
+/*             dibujarCuadricula()
             darEstilos()
-            item.nextElementSibling.style.color = "greenyellow"
+ */            item.nextElementSibling.style.color = "greenyellow"
             item.nextElementSibling.style.transition = "color 0s"
         })
         item.addEventListener("mouseup", () => {
             item.nextElementSibling.style.color = "grey"
             item.nextElementSibling.style.transition = "color .5s"
+        })
+    })
+
+    buscarArray(controles, "input[type='radio']").forEach((item, num) => {
+        item.addEventListener("click", () => {
+            cambiarPreset(item, num)
+            escribirValores()
         })
     })
 
