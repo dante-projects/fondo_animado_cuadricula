@@ -17,7 +17,7 @@
     --borderRadius: 4px;
     --colorEnfasis: rgb(160, 199, 206);
     --blancoTransludico: rgb(255, 255, 255, .2);
-    --negroTranslucido: rgba(0, 0, 0, 0.4);
+    --negroTranslucido: rgba(0, 0, 0, 0.8);
 }
 
 /* clases predefinidas */
@@ -55,6 +55,13 @@ body {
     .contenedorFondo {
         position: absolute;
         width: 100vw;
+    }
+
+    .texto {
+        width: 60%;
+        height: 30%;
+        background-color: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(10px);
     }
 
     .panelConfiguracion {
@@ -107,15 +114,33 @@ body {
                         width: 100%;
                         height: 50px;
     
-                        input {
+                        input[type='range'] {
                             width: calc(100% - 65px);
+                            background: transparent;
+                            cursor: pointer;
+
+                            /* firefox */
+
+                            &::-moz-range-track {
+                                height: 6px;
+                                border: 1px solid rgba(128, 128, 128, 0.2);
+                                border-radius: 4px;
+                                background-color: transparent;
+                            }
+
+                            &::-moz-range-thumb {
+                                width: 20px;
+                                height: 10px;
+                                border: none;
+                                border-radius: 4px;
+                                background-color: var(--colorEnfasis);
+                            }
                         }
     
                         .campoValor {
                             display: flex;
                             width: calc(var(--cuadrado) + 10px);
                             height: var(--cuadrado);
-                            transition: .4s;
                         }
                     }
                 }
@@ -194,7 +219,6 @@ body {
                 width: var(--cuadrado);
                 height: var(--cuadrado);
                 margin: 6px;
-                background-color: var(--blancoTransludico);
                 backdrop-filter: blur(4px);
                 font-weight: bolder;
                 color: var(--colorEnfasis);

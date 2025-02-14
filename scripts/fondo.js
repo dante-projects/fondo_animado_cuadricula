@@ -1,79 +1,10 @@
 import { crearElemento } from "./modulos/crearElemento.js"
+import { presets } from "../configuraciones/presets.js"
+import { configuracionInputs } from "../configuraciones/inputsConfiguracion.js"
 
 const contenedorFondo = document.getElementById("contenedorFondo")
 const ancho = document.body.getBoundingClientRect().width
 const alto = document.body.getBoundingClientRect().height
-const configuracionInputs = [
-    [
-        { funcion: "Tamaño cuadrícula", elemento: "input", type: "range" },
-        { funcion: "Tamaño elemento", elemento: "input", type: "range" },
-        { funcion: "Grosor del borde", elemento: "input", type: "range", },
-        { funcion: "Redondeo", elemento: "input", type: "range" },
-        { funcion: "Desenfoque", elemento: "input", type: "range" },
-        { funcion: "Transparencia", elemento: "input", type: "range" },
-        { preset: "preset1", elemento: "input", type: "radio", name: "fondo1", checked: true },
-        { preset: "preset2", elemento: "input", type: "radio", name: "fondo1" },
-        { preset: "preset3", elemento: "input", type: "radio", name: "fondo1" },
-        { preset: "preset4", elemento: "input", type: "radio", name: "fondo1" },
-        { preset: "preset5", elemento: "input", type: "radio", name: "fondo1" },
-        { preset: "preset5", elemento: "input", type: "radio", name: "fondo1" },
-
-    ]
-]
-
-const presets = {
-    fondo1: [
-        [
-            { min: 20, max: 100, value: 60 },
-            { min: 1, max: 100, value: 70 },
-            { min: 0, max: 20, value: 1 },
-            { min: 0, max: 50, value: 20 },
-            { min: 0, max: 20, value: 4 },
-            { min: 0, max: 100, value: 40 }
-        ],
-        [
-            { min: 20, max: 100, value: 1 },
-            { min: 1, max: 100, value: 1 },
-            { min: 0, max: 20, value: 1 },
-            { min: 0, max: 50, value: 1 },
-            { min: 0, max: 20, value: 1 },
-            { min: 0, max: 100, value: 1 }
-        ],
-        [
-            { min: 20, max: 100, value: 2 },
-            { min: 1, max: 100, value: 2 },
-            { min: 0, max: 20, value: 2 },
-            { min: 0, max: 50, value: 2 },
-            { min: 0, max: 20, value: 2 },
-            { min: 0, max: 100, value: 2 }
-        ],
-        [
-            { min: 20, max: 100, value: 3 },
-            { min: 1, max: 100, value: 3 },
-            { min: 0, max: 20, value: 3 },
-            { min: 0, max: 50, value: 3 },
-            { min: 0, max: 20, value: 3 },
-            { min: 0, max: 100, value: 3 }
-        ],
-        [
-            { min: 20, max: 100, value: 4 },
-            { min: 1, max: 100, value: 4 },
-            { min: 0, max: 20, value: 4 },
-            { min: 0, max: 50, value: 4 },
-            { min: 0, max: 20, value: 4 },
-            { min: 0, max: 100, value: 4 }
-        ],
-        [
-            { min: 20, max: 100, value: 5 },
-            { min: 1, max: 100, value: 5 },
-            { min: 0, max: 20, value: 5 },
-            { min: 0, max: 50, value: 5 },
-            { min: 0, max: 20, value: 5 },
-            { min: 0, max: 100, value: 5 }
-        ],
-
-    ]
-}
 
 function calcularNumItems() {
     const itemsFila = Math.floor(ancho / valores[0])
@@ -107,14 +38,9 @@ function dibujarCuadricula() {
 }
 
 function darEstilos() {
-    if (document.head.querySelector(".estilo1")) {
-        document.head.querySelector(".estilo1").remove()
-        console.log("removido")
-    }
-    console.log(valores)
 
-    let estilo = crearElemento(document.head, "style", "estilo1")
-    estilo.innerText += `
+    let estiloPersonalizado = crearElemento(document.head, "style", "estiloPersonalizado")
+    estiloPersonalizado.innerText += `
     .fila {
         display: flex;
         width: 100%;
@@ -143,7 +69,13 @@ function darEstilos() {
         }
     }
     `
-    document.head.appendChild(estilo)
+    document.head.appendChild(estiloPersonalizado)
+}
+
+function borrarEstilo() {
+    if (document.head.querySelector(".estiloPersonalizado")) {
+        document.head.querySelector(".estiloPersonalizado").remove()
+    }
 }
 
 const seleccionFondo = Array.from(document.querySelectorAll("#seleccionFondo li .inputOculto"))
@@ -156,7 +88,7 @@ function dibujarControles(par) {
     configuracionInputs[num].forEach((item) => {
 
         let input
-        if (item.funcion) {
+        if (item.type === "range") {
             const itemConfiguracion = crearElemento(rangos, "div", "bloquesConfiguracion")
             itemConfiguracion.innerText = item.funcion
             const inputBloque = crearElemento(itemConfiguracion, "div", "bloqueInput")
@@ -164,7 +96,7 @@ function dibujarControles(par) {
             crearElemento(inputBloque, "span", "campoValor borderRadiusGrey flexCentrado")
         }
 
-        if (item.preset) {
+        if (item.type === "radio") {
             input = crearElemento(radios, item.elemento, "preset borderGrey")
         }
 
@@ -206,14 +138,13 @@ function cambiarPreset(item = null, num = null) {
     let radio = item ? item : 0
     const presetSeleccionado = buscarArray(controles, "input[type='radio']").find(item => item.checked === true)
     const index = num ? num : buscarArray(controles, "input[type='radio']").findIndex(item => item.checked === true)
-    valores = []
 
     buscarArray(controles, "input[type = 'range']").forEach((rango, num) => {
         const configuracion = Object.entries(presets[presetSeleccionado.name][index][num])
         configuracion.forEach(([clave, valor]) => {
             rango.setAttribute(clave, valor)
             if (clave === "value") {
-                valores.push(valor)
+                rango.value = valor /* devolver valores por defecto */
             }
         })
     })
@@ -225,31 +156,42 @@ function main() {
     recogerValores()
     escribirValores()
 
-    /*     dibujarCuadricula()
-        darEstilos()
-     */
+    dibujarCuadricula()
+    darEstilos()
+
     buscarArray(controles, "input[type='range']").forEach((item) => {
+        item.addEventListener("change", () => {
+                        borrarEstilo()
+                        dibujarCuadricula()
+            
+            darEstilos()
+        })
         item.addEventListener("input", () => {
             recogerValores()
+
             escribirValores(item)
-/*             dibujarCuadricula()
-            darEstilos()
- */            item.nextElementSibling.style.color = "greenyellow"
+
+            item.nextElementSibling.style.color = "greenyellow"
             item.nextElementSibling.style.transition = "color 0s"
         })
         item.addEventListener("mouseup", () => {
             item.nextElementSibling.style.color = "grey"
-            item.nextElementSibling.style.transition = "color .5s"
+            item.nextElementSibling.style.transition = "color 2s"
         })
     })
 
     buscarArray(controles, "input[type='radio']").forEach((item, num) => {
-        item.addEventListener("click", () => {
+        item.addEventListener("change", () => {
             cambiarPreset(item, num)
+            recogerValores()
+
             escribirValores()
+            borrarEstilo()
+
+            dibujarCuadricula()
+            darEstilos()
         })
     })
-
 }
 
 main()
