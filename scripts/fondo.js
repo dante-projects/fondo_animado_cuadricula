@@ -1,6 +1,7 @@
 import { crearElemento } from "./modulos/crearElemento.js"
-import { presets } from "../configuraciones/presets.js"
 import { configuracionInputs } from "../configuraciones/inputsConfiguracion.js"
+import { dibujarCampoTexto } from "./modulos/dibujarCampoTexto.js"
+import { presets } from "../configuraciones/presets.js"
 
 const contenedorFondo = document.getElementById("contenedorFondo")
 const ancho = document.body.getBoundingClientRect().width
@@ -60,10 +61,12 @@ function darEstilos() {
             .cuadrado {
                 width: ${valores[1]}%;
                 aspect-ratio: 1/1;
-                border: ${valores[2]}px solid grey;
-                border-radius: ${valores[3]}%;
-                filter: blur(${valores[4]}px);
-                opacity: calc(${valores[5]} / 100);
+                border-width: ${valores[2]}px;
+                border-style: solid;
+                border-color: rgba(128, 128, 128, ${valores[3]}%);
+                border-radius: ${valores[4]}%;
+                filter: blur(${valores[5]}px);
+                opacity: calc(${valores[6]} / 100);
                 transition: 2s;
             }
         }
@@ -82,7 +85,7 @@ const seleccionFondo = Array.from(document.querySelectorAll("#seleccionFondo li 
 const controles = document.getElementById("controles")
 function dibujarControles(par) {
     const rangos = crearElemento(controles, "div", "rangos")
-    const radios = crearElemento(controles, "div", "radios borderRadiusGrey")
+    const radios = crearElemento(controles, "div", "radios borderRadiusGrey", "radiosPreset")
 
     const num = seleccionFondo.indexOf(par)
     configuracionInputs[num].forEach((item) => {
@@ -108,13 +111,13 @@ function dibujarControles(par) {
     })
 }
 
-function buscarArray(contenedor, selector) {
+function buscarEnArray(contenedor, selector) {
     return Array.from(contenedor.querySelectorAll(selector))
 }
 
 let valores = []
 function recogerValores() {
-    const inputs = buscarArray(controles, "input[type='range']")
+    const inputs = buscarEnArray(controles, "input[type='range']")
     valores = []
     inputs.forEach((item) => {
         valores.push(item.value)
@@ -124,10 +127,10 @@ function recogerValores() {
 function escribirValores(input = null) {
     let elemento
     if (input) {
-        const posicion = buscarArray(controles, "input[type='range']").indexOf(input)
+        const posicion = buscarEnArray(controles, "input[type='range']").indexOf(input)
         input.nextElementSibling.innerText = valores[posicion]
     } else {
-        elemento = buscarArray(controles, "input[type='range']")
+        elemento = buscarEnArray(controles, "input[type='range']")
         elemento.forEach((item, num) => {
             item.nextElementSibling.innerText = valores[num]
         })
@@ -135,23 +138,22 @@ function escribirValores(input = null) {
 }
 
 function cambiarPreset(item = null, num = null) {
-    let radio = item ? item : 0
-    const presetSeleccionado = buscarArray(controles, "input[type='radio']").find(item => item.checked === true)
-    const index = num ? num : buscarArray(controles, "input[type='radio']").findIndex(item => item.checked === true)
+    const radiosPreset = buscarEnArray(controles, "input[dataFuncion='presets']")
+    const presetSeleccionado = radiosPreset.find(item => item.checked === true)
+    const index = radiosPreset.findIndex(item => item === presetSeleccionado)
+    const configuracion = presets[presetSeleccionado.name][index]
+    const rangos = buscarEnArray(controles, "input[dataFuncion='control'")
 
-    buscarArray(controles, "input[type = 'range']").forEach((rango, num) => {
-        const configuracion = Object.entries(presets[presetSeleccionado.name][index][num])
-        configuracion.forEach(([clave, valor]) => {
-            rango.setAttribute(clave, valor)
-            if (clave === "value") {
-                rango.value = valor /* devolver valores por defecto */
-            }
+    rangos.forEach((item, num) => {
+        Object.entries(configuracion[num]).forEach(([clave, valor]) => {
+            item.setAttribute(clave, valor)
         })
     })
 }
 
 function main() {
     dibujarControles(seleccionFondo[0])
+    dibujarCampoTexto()
     cambiarPreset()
     recogerValores()
     escribirValores()
@@ -159,10 +161,10 @@ function main() {
     dibujarCuadricula()
     darEstilos()
 
-    buscarArray(controles, "input[type='range']").forEach((item) => {
+    buscarEnArray(controles, "input[type='range']").forEach((item) => {
         item.addEventListener("change", () => {
-                        borrarEstilo()
-                        dibujarCuadricula()
+            borrarEstilo()
+            dibujarCuadricula()
             
             darEstilos()
         })
@@ -180,7 +182,7 @@ function main() {
         })
     })
 
-    buscarArray(controles, "input[type='radio']").forEach((item, num) => {
+    buscarEnArray(controles, "input[type='radio']").forEach((item, num) => {
         item.addEventListener("change", () => {
             cambiarPreset(item, num)
             recogerValores()
