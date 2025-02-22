@@ -8,17 +8,23 @@
     list-style: none;
     font-family: "anta";
     font-size: 12px;
+    font-weight: bolder;
+    color: var(--grisTexto);
     letter-spacing: 2px;
     user-select: none;
 }
 
 :root {
-    --transicion: 1s ease-in-out;
+    --transicion: .8s ease-in-out;
     --cuadrado: 32px;
     --borderRadius: 4px;
-    --colorEnfasis: rgb(160, 199, 206);
+    --grisTexto: rgb(92, 92, 92);
+    --grisClaro: rgba(128, 128, 128, .2);
+    --colorEnfasis_1: rgb(97, 136, 146);
+    --colorEnfasis_2: rgb(85, 85, 85);
     --blancoTransludico: rgb(255, 255, 255, .2);
     --negroTranslucido: rgba(0, 0, 0, 0.8);
+    --botonTransicion: .3s;
 }
 
 /* clases predefinidas */
@@ -31,7 +37,7 @@
 }
 
 .borderRadiusGrey {
-    border: 1px solid rgba(128, 128, 128, 0.2);
+    border: 1px solid var(--grisClaro);
     border-radius: var(--borderRadius);
 } 
 
@@ -39,6 +45,40 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.cristalOscuro {
+    background-color: var(--negroTranslucido);
+    backdrop-filter: blur(4px);
+}
+
+.cristalClaro {
+    background-color: rgba(255, 255, 255);
+    /* backdrop-filter: blur(4px); */
+}
+
+.botonCuadrado {
+    position: relative;
+    width: 32px;
+    height: 32px;
+    color: var(--grisTexto);
+    font-weight: bolder;
+    transition: var(--botonTransicion);
+    
+    &:hover,
+    &:has(input[type="radio"]:checked) {
+        color: white;
+        background-color: var(--colorEnfasis_1);
+        border-color: var(--colorEnfasis_1);
+    }
+
+    input[type="radio"] {
+        position: absolute;
+        appearance: none;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+    }
 }
 /* fin de clases predefinisda */
 
@@ -70,121 +110,150 @@ body {
         left: -310px;
         width: 310px;
         height: calc(100% - 30px);
-        background-color: var(--negroTranslucido);
-        backdrop-filter: blur(4px);
         border-left: none;
-        padding: 20px;
+        padding: 22px;
         transition: var(--transicion);
 
-        .tituloConfiguracion {
-            display: flex;
-            justify-content: center;
+        .configuracion {
+            position: relative;
             width: 100%;
-            height: 30px;
-            font-size: 2rem;
-            color: grey;  
-            margin-bottom: 30px;
-        }
+            height: 100%;
+            perspective: 1800px;
+            overflow: hidden;
 
-        form {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-direction: column;
-            width: 100%;
-            height: calc(100% - 60px); /* titulo + margen */
-            color: grey;
-
-            .rangos {
+            .seccionesLista {
                 display: flex;
-                align-items: center;
-                flex-direction: column;
+                justify-content: space-between;
                 width: 100%;
-                height: calc(100% - 30px - 200px - 100px); /* altura de radios, altura de texto y margenes */
-                
-                overflow-y: auto;
+                color: grey;
+                margin-bottom: 10px;
 
-                .bloquesConfiguracion {
+                .seccion {
+                    width: var(--cuadrado);
+                    aspect-ratio: 1/1;
+                }
+            }
+
+            &:has(.botonCuadrado:first-child input:checked) fieldset:first-of-type, 
+            &:has(.botonCuadrado:nth-of-type(2) input:checked) fieldset:nth-of-type(2), 
+            &:has(.botonCuadrado:nth-of-type(3) input:checked) fieldset:nth-of-type(3), 
+            &:has(.botonCuadrado:nth-of-type(4) input:checked) fieldset:nth-of-type(4), 
+            &:has(.botonCuadrado:nth-of-type(5) input:checked) fieldset:nth-of-type(5), 
+            &:has(.botonCuadrado:nth-of-type(6) input:checked) fieldset:nth-of-type(6) { 
+                left: 0; 
+            }
+
+            &:has(.botonCuadrado:first-child input:not(:checked)) fieldset:first-of-type, 
+            &:has(.botonCuadrado:nth-of-type(2) input:not(:checked)) fieldset:nth-of-type(2), 
+            &:has(.botonCuadrado:nth-of-type(3) input:not(:checked)) fieldset:nth-of-type(3), 
+            &:has(.botonCuadrado:nth-of-type(4) input:not(:checked)) fieldset:nth-of-type(4), 
+            &:has(.botonCuadrado:nth-of-type(5) input:not(:checked)) fieldset:nth-of-type(5), 
+            &:has(.botonCuadrado:nth-of-type(6) input:not(:checked)) fieldset:nth-of-type(6) { 
+                left: 120%;
+            }
+
+            fieldset {
+                border: none;
+                position: absolute;
+                left: 100%;
+                top: 40px;
+                width: 100%;
+                height: calc(100% - 94px);
+                transition: 1s;
+                transform-origin: left;
+                transform-style: preserve-3d;
+
+                .tituloSeccion  {
                     width: 100%;
-                    height: 80px;
-    
-                    .bloqueInput{
+                    height: 30px;
+                    background-color: var(--grisTexto);
+                    color: white;
+                    font-size: 18px;
+                    border-radius: var(--borderRadius);
+                    margin: 20px 0 40px 0;
+                }
+
+                .controlesConfiguracion {
+                    position: relative;
+                    width: 100%;
+                    height: calc(100% - 90px);
+                    color: grey;
+                    overflow-y: auto;
+                    /* firefox */
+                    scrollbar-width: none;
+
+                    .contenedorRango {
+                        position: relative;
                         display: flex;
                         justify-content: space-between;
                         align-items: center;
                         width: 100%;
-                        height: 50px;
+                        height: 44px;
+                        margin-bottom: 50px;
+
+                        .cajaIzq {
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: space-between;
+                            width: 74%;
+                            height: 100%;
+                        }
+
+                        .cajaDer {
+                            position: absolute;
+                            bottom: 0;
+                            right: 0;
+                            width: 50px;
+                            height: 35px;
+                            overflow: hidden;
+
+                            .valorInput {
+                                width: 100%;
+                                height: 100%;
+                            }    
+                        }
     
-                        input[type='range'] {
-                            width: calc(100% - 65px);
+                        input[type="range"] {
+                            width: 100%;
                             background: transparent;
                             cursor: pointer;
 
-                            /* firefox */
-
                             &:hover::-moz-range-thumb {
-                                background-color: greenyellow;
+                                background-color: var(--colorEnfasis_2);
+                                border-color: var(--colorEnfasis_2);
                             }
 
                             &::-moz-range-track {
-                                height: 12px;
-                                border: 1px solid rgba(128, 128, 128, 0.2);
+                                height: 2px;
+                                border: 1px solid var(--grisClaro);
                                 border-radius: 4px;
                                 background-color: transparent;
                             }
 
                             &::-moz-range-thumb {
-                                width: 22px;
+                                box-sizing: border-box;
+                                width: 24px;
                                 height: 12px;
-                                border: none;
-                                border-radius: 4px;
-                                background-color: var(--colorEnfasis);
+                                border: 1px solid rgb(189, 189, 189);
+                                border-radius: 3px;
+                                background-color: white;
                                 transition: .5s;
+                                background-image: url();
                             }
-                        }
-    
-                        .campoValor {
-                            display: flex;
-                            width: calc(var(--cuadrado) + 10px);
-                            height: var(--cuadrado);
                         }
                     }
                 }
-            }
-
-            .bordeCifra {
-                width: 50%;
-                aspect-ratio:  1/1;
-                border: 1px solid rgba(128, 128, 128, 0.301);
-                border-radius: 50%;
-                margin: 0 6px 0 6px;
-
-                .controlCifra {
-                    font-weight: 1800;
-                }
-            }
+            }    
         }
 
-        .radios {
-            width: 100%;
-            height: 30px;
+        .presets {
+            position: absolute;
             display: flex;
-            justify-content: space-around;
-            align-items: center;
-
-            .preset {
-                appearance:  none;
-                height: 50%;
-                aspect-ratio: 1/1;
-                cursor: pointer;
-                border: 1px solid rgba(128, 128, 128, 0.2);
-                border-radius: 50%;
-
-                &:checked {
-                    border-color: var(--colorEnfasis);
-                    background-color: var(--colorEnfasis);
-                }
-            }
+            justify-content: space-between;
+            bottom: 22px; /* padding contenenedor */
+            left: 22px;
+            width: calc(100% - 44px);
+            height: auto;
         }
     }
 
@@ -199,8 +268,7 @@ body {
         aspect-ratio: 1/4;
         font-weight: bold;
         writing-mode: vertical-lr;
-        color: var(--colorEnfasis);
-        background-color: var(--blancoTransludico);
+        color: grey;
         letter-spacing: 4px;
         transition: var(--transicion);
 
@@ -214,11 +282,12 @@ body {
     }
 
     .panelConfiguracion:has(.interruptor input:checked) {
-        left: 0;
+        left: 15px;
 
         .interruptor {
             top: calc(100% - var(--cuadrado) * 4 + 1px);
-            background-color: var(--negroTranslucido);
+            color: var(--colorEnfasis_1);
+            /* background-color: var(--negroTranslucido); */
         }
     }
 
@@ -226,30 +295,17 @@ body {
         position: absolute;
         bottom: 0;
         padding: 10px 20px;
+        border-radius: 8px;
 
         .listaFondos {
             display: flex;
-            width: 100%;
-            height: 100%;
 
-            li {
-                position: relative;
-                width: var(--cuadrado);
-                height: var(--cuadrado);
+            .botonCuadrado {
                 margin: 6px;
-                backdrop-filter: blur(4px);
-                font-weight: bolder;
-                color: var(--colorEnfasis);
-                transition: .4s;
+            }
 
-                &:has(.inputOculto:hover) {
-                    background-color: var(--negroTranslucido);
-                }
-
-                &:has(.inputOculto:checked) {
-                    width: 200px;
-                    background-color: var(--negroTranslucido);
-                }
+            .botonCuadrado:has(.inputOculto:checked) {
+                width: 200px;
             }
         }
     }

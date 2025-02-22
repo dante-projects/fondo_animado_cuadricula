@@ -1,5 +1,5 @@
 import { crearElemento } from "./modulos/crearElemento.js"
-import { configuracionInputs } from "../configuraciones/inputsConfiguracion.js"
+import { configuracion } from "../configuraciones/configuracion.js"
 import { dibujarCampoTexto } from "./modulos/dibujarCampoTexto.js"
 import { presets } from "../configuraciones/presets.js"
 
@@ -81,59 +81,46 @@ function borrarEstilo() {
     }
 }
 
-const seleccionFondo = Array.from(document.querySelectorAll("#seleccionFondo li .inputOculto"))
-const controles = document.getElementById("controles")
-function dibujarControles(par) {
-    const rangos = crearElemento(controles, "div", "rangos")
-    const radios = crearElemento(controles, "div", "radios borderRadiusGrey", "radiosPreset")
+// const seleccionFondo = Array.from(document.querySelectorAll("#seleccionFondo li .inputOculto"))
+const seccionesConfiguracion = Array.from(document.querySelectorAll("fieldset"))
+function dibujarSeccionesConfiguracion(par) {
+    Object.entries(configuracion[par]).forEach((key, num) => {
+        const seccionActiva = seccionesConfiguracion[num]
 
-    const num = seleccionFondo.indexOf(par)
-    configuracionInputs[num].forEach((item) => {
+        if (key[0] === "rangos") {
 
-        let input
-        if (item.type === "range") {
-            const itemConfiguracion = crearElemento(rangos, "div", "bloquesConfiguracion")
-            itemConfiguracion.innerText = item.funcion
-            const inputBloque = crearElemento(itemConfiguracion, "div", "bloqueInput")
-            input = crearElemento(inputBloque, item.elemento)
-            crearElemento(inputBloque, "span", "campoValor borderRadiusGrey flexCentrado")
+            Object.entries(configuracion[par][key[0]]).forEach((item) => {
+                const contenedorRango = crearElemento(seccionActiva.querySelector(".controlesConfiguracion"), "div", "contenedorRango")
+                
+                const cajaIzq = crearElemento(contenedorRango, "div", "cajaIzq")
+                const titulo = crearElemento(cajaIzq, "span", "tituloInput").innerText = item[1].titulo
+                const nuevoRango = crearElemento(cajaIzq, "input")
+
+                const cajaDer = crearElemento(contenedorRango, "span", "cajaDer borderRadiusGrey flexCentrado")
+                const valor = crearElemento(cajaDer, "span", "valorInput flexCentrado")
+
+                Object.entries(item[1]).forEach(([clave, valor]) => {
+                    if (clave in nuevoRango) {
+                        nuevoRango.setAttribute(clave, valor)
+                    }
+                })
+            })
         }
-
-        if (item.type === "radio") {
-            input = crearElemento(radios, item.elemento, "preset borderGrey")
-        }
-
-        Object.entries(item).forEach(([key, value]) => {
-            if (key !== "funcion" && key !== "elemento") {
-                input.setAttribute(key, value)
-            }
-        })
     })
 }
 
-function buscarEnArray(contenedor, selector) {
-    return Array.from(contenedor.querySelectorAll(selector))
-}
-
-let valores = []
-function recogerValores() {
-    const inputs = buscarEnArray(controles, "input[type='range']")
-    valores = []
-    inputs.forEach((item) => {
-        valores.push(item.value)
-    })
-}
-
-function escribirValores(input = null) {
-    let elemento
-    if (input) {
-        const posicion = buscarEnArray(controles, "input[type='range']").indexOf(input)
-        input.nextElementSibling.innerText = valores[posicion]
+let inputsConfiguracion = []
+function actualizarValores(inputActivado = null) {
+    const secciones = document.querySelectorAll("fieldset")
+    if (!inputActivado) {
+        secciones.forEach((seccion) => {
+            seccion.querySelectorAll("input").forEach((input) => {
+                inputsConfiguracion.push(input)
+                input.parentElement.parentElement.querySelector(".valorInput").innerText = input.value
+            })
+        })    
     } else {
-        elemento = buscarEnArray(controles, "input[type='range']")
-        elemento.forEach((item, num) => {
-            item.nextElementSibling.innerText = valores[num]
-        })
+        inputActivado.parentElement.querySelector(".valorInput").innerText = inputActivado.value
     }
 }
 
@@ -152,48 +139,59 @@ function cambiarPreset(item = null, num = null) {
 }
 
 function main() {
-    dibujarControles(seleccionFondo[0])
-    dibujarCampoTexto()
-    cambiarPreset()
-    recogerValores()
-    escribirValores()
+    dibujarSeccionesConfiguracion("fondo_1")
+    actualizarValores()
 
-    dibujarCuadricula()
-    darEstilos()
+    // dibujarCampoTexto()
+    // cambiarPreset()
+    // dibujarCuadricula()
+    // darEstilos()
 
-    buscarEnArray(controles, "input[type='range']").forEach((item) => {
+    inputsConfiguracion.forEach((item) => {
         item.addEventListener("change", () => {
             borrarEstilo()
-            dibujarCuadricula()
-            
-            darEstilos()
+            // dibujarCuadricula()
+            // darEstilos()
         })
-        item.addEventListener("input", () => {
-            recogerValores()
 
-            escribirValores(item)
+        if (item.type === "range") {
+            const valor = item.parentElement.nextSibling.querySelector(".valorInput")
 
-            item.nextElementSibling.style.color = "greenyellow"
-            item.nextElementSibling.style.transition = "color 0s"
-        })
-        item.addEventListener("mouseup", () => {
-            item.nextElementSibling.style.color = "grey"
-            item.nextElementSibling.style.transition = "color 2s"
-        })
+            item.addEventListener("input", () => {
+                actualizarValores()
+                valor.parentElement.style.backgroundColor = "var(--colorEnfasis_1)"
+                valor.parentElement.style.transition = ".2s"
+
+                valor.style.transform = "scale(130%)"
+                valor.style.color= "white"
+                valor.style.transition = ".2s"
+            })
+
+            item.addEventListener("mouseleave", () => {
+                valor.parentElement.style.backgroundColor = "white"
+                valor.parentElement.style.transition = ".6s"
+
+                valor.style.transform = "scale(100%)"
+                valor.style.color = "var(--grisTexto)"
+                valor.style.transition = ".2s"
+            })   
+        } 
     })
 
-    buscarEnArray(controles, "input[type='radio']").forEach((item, num) => {
-        item.addEventListener("change", () => {
-            cambiarPreset(item, num)
-            recogerValores()
+    // buscarEnArray(controles, "input[type='radio']").forEach((item, num) => {
+    //     item.addEventListener("change", () => {
+    //         cambiarPreset(item, num)
+    //         recogerValores()
 
-            escribirValores()
-            borrarEstilo()
+    //         escribirValores()
+    //         borrarEstilo()
 
-            dibujarCuadricula()
-            darEstilos()
-        })
-    })
+    //         dibujarCuadricula()
+    //         darEstilos()
+    //     })
+    // })
 }
 
-main()
+document.addEventListener("DOMContentLoaded", () => {
+    main()
+})

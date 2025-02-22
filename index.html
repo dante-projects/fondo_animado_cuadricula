@@ -12,23 +12,90 @@
 <body>
     <div id="contenedorFondo" class="contenedorFondo"></div>
     <div class="texto"></div>
-    <div class="panelConfiguracion  borderRadiusGrey">
-        <span class="tituloConfiguracion">CONFIGURACION</span>
-        <form id="controles" action="..."></form>
+    <div class="panelConfiguracion cristalClaro borderRadiusGrey">
+        <form class="configuracion">
+            <ul id="seccionesLista" class="seccionesLista">
+                <li class="seccion botonCuadrado borderRadiusGrey material-icons flexCentrado">
+                    <input type="radio" name="seccionPanel" checked>tune</li>
+                <li class="seccion botonCuadrado borderRadiusGrey material-icons flexCentrado">
+                    <input type="radio" name="seccionPanel">text_fields</li>
+                <li class="seccion botonCuadrado borderRadiusGrey material-icons flexCentrado">
+                    <input type="radio" name="seccionPanel">palette</li>
+                <li class="seccion botonCuadrado borderRadiusGrey material-icons flexCentrado">
+                    <input type="radio" name="seccionPanel">play_circle</li>
+                <li class="seccion botonCuadrado borderRadiusGrey material-icons flexCentrado">
+                    <input type="radio" name="seccionPanel">play_circle</li>
+                <li class="seccion botonCuadrado borderRadiusGrey material-icons flexCentrado">
+                    <input type="radio" name="seccionPanel">play_circle</li>    
+            </ul>
+            <fieldset id="contenedorRangos">
+                <span class="tituloSeccion flexCentrado">Configuracion</span>
+                <div class="controlesConfiguracion"></div>
+            </fieldset>
+
+            <fieldset id="contenedorTexto">
+                <span class="tituloSeccion flexCentrado">Texto</span>
+                <div class="controlesConfiguracion"></div>
+            </fieldset>
+
+            <fieldset id="contenedorFondo">
+                <span class="tituloSeccion flexCentrado">Fondo</span>
+                <div class="controlesConfiguracion"></div>
+            </fieldset>
+
+            <fieldset id="contenedorAnimacion">
+                <span class="tituloSeccion flexCentrado">Animacion</span>
+                <div class="controlesConfiguracion"></div>
+            </fieldset>
+
+            <fieldset id="contenedorAnimacion">
+                <span class="tituloSeccion flexCentrado">falta programar</span>
+                <div class="controlesConfiguracion"></div>
+            </fieldset>
+
+            <fieldset id="contenedorAnimacion">
+                <span class="tituloSeccion flexCentrado">falta programar</span>
+                <div class="controlesConfiguracion"></div>
+            </fieldset>    
+        </form>
+        <ul class="presets">
+            <li class="botonCuadrado flexCentrado borderRadiusGrey">1
+                <input type="radio" name="preset" checked></li>
+            <li class="botonCuadrado flexCentrado  borderRadiusGrey">2
+                <input type="radio" name="preset"></li>
+            <li class="botonCuadrado flexCentrado  borderRadiusGrey">3
+                <input type="radio" name="preset"></li>
+            <li class="botonCuadrado flexCentrado  borderRadiusGrey">4
+                <input type="radio" name="preset"></li>
+            <li class="botonCuadrado flexCentrado  borderRadiusGrey">5
+                <input type="radio" name="preset"></li>
+            <li class="botonCuadrado flexCentrado  borderRadiusGrey">6
+                <input type="radio" name="preset"></li>
+        </ul>
         <div class="interruptor borderRadiusGrey">AJUSTES<input type="checkbox"></div>
     </div>
     <form class="seleccionFondo" action="..." id="seleccionFondo" name="parasito_SEO">
         <ul class="listaFondos">
-            <li class="borderRadiusGrey flexCentrado">1<input class="inputOculto" type="radio" name="fondo" checked></li>
-            <li class="borderRadiusGrey flexCentrado">2<input class="inputOculto" type="radio" name="fondo"></li>
-            <li class="borderRadiusGrey flexCentrado">3<input class="inputOculto" type="radio" name="fondo"></li>
-            <li class="borderRadiusGrey flexCentrado">4<input class="inputOculto" type="radio" name="fondo"></li>
-            <li class="borderRadiusGrey flexCentrado">5<input class="inputOculto" type="radio" name="fondo"></li>
-            <li class="borderRadiusGrey flexCentrado">6<input class="inputOculto" type="radio" name="fondo"></li>
-            <li class="borderRadiusGrey flexCentrado">7<input class="inputOculto" type="radio" name="fondo"></li>
-            <li class="borderRadiusGrey flexCentrado">8<input class="inputOculto" type="radio" name="fondo"></li>
-            <li class="borderRadiusGrey flexCentrado">9<input class="inputOculto" type="radio" name="fondo"></li>
-            <li class="borderRadiusGrey flexCentrado">10<input class="inputOculto" type="radio" name="fondo"></li>
+            <li class="botonCuadrado borderRadiusGrey flexCentrado">0
+                <input class="inputOculto" type="radio" name="fondo" checked></li>
+            <li class="botonCuadrado borderRadiusGrey flexCentrado">
+                <input class="inputOculto" type="radio" name="fondo">1</li>
+            <li class="botonCuadrado borderRadiusGrey flexCentrado">
+                <input class="inputOculto" type="radio" name="fondo">2</li>
+            <li class="botonCuadrado borderRadiusGrey flexCentrado">
+                <input class="inputOculto" type="radio" name="fondo">3</li>
+            <li class="botonCuadrado borderRadiusGrey flexCentrado">
+                <input class="inputOculto" type="radio" name="fondo">4</li>
+            <li class="botonCuadrado borderRadiusGrey flexCentrado">
+                <input class="inputOculto" type="radio" name="fondo">5</li>
+            <li class="botonCuadrado borderRadiusGrey flexCentrado">
+                <input class="inputOculto" type="radio" name="fondo">6</li>
+            <li class="botonCuadrado borderRadiusGrey flexCentrado">
+                <input class="inputOculto" type="radio" name="fondo">7</li>
+            <li class="botonCuadrado borderRadiusGrey flexCentrado">
+                <input class="inputOculto" type="radio" name="fondo">8</li>
+            <li class="botonCuadrado borderRadiusGrey flexCentrado">
+                <input class="inputOculto" type="radio" name="fondo">9</li>
         </ul>
     </form>
     <script type="module" src="scripts/fondo.js"></script>
