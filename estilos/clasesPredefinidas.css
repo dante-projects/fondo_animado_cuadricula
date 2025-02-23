@@ -1,0 +1,23 @@
+:root {
+    --transicion: .8s ease-in-out;
+    --cuadrado: 32px;
+    --borderRadius: 4px;
+    --grisTexto: rgb(92, 92, 92);
+    --grisClaro: rgba(128, 128, 128, .2);
+    --colorEnfasis_1: rgb(179, 94, 98);
+    --colorEnfasis_2: rgb(202, 38, 38);
+    --blancoTransludico: rgb(255, 255, 255, .2);
+    --negroTranslucido: rgba(0, 0, 0, 0.8);
+    --botonTransicion: .3s;
+}
+
+.borderRadiusGrey {
+    border: 1px solid var(--grisClaro);
+    border-radius: var(--borderRadius);
+} 
+
+.flexCentrado {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -83,27 +83,24 @@ function borrarEstilo() {
 
 // const seleccionFondo = Array.from(document.querySelectorAll("#seleccionFondo li .inputOculto"))
 const seccionesConfiguracion = Array.from(document.querySelectorAll("fieldset"))
+console.log(seccionesConfiguracion)
 function dibujarSeccionesConfiguracion(par) {
+
     Object.entries(configuracion[par]).forEach((key, num) => {
-        const seccionActiva = seccionesConfiguracion[num]
+        const seccionActiva = seccionesConfiguracion[num].querySelector(".controlesConfiguracion")
 
         if (key[0] === "rangos") {
-
             Object.entries(configuracion[par][key[0]]).forEach((item) => {
-                const contenedorRango = crearElemento(seccionActiva.querySelector(".controlesConfiguracion"), "div", "contenedorRango")
-                
-                const cajaIzq = crearElemento(contenedorRango, "div", "cajaIzq")
-                const titulo = crearElemento(cajaIzq, "span", "tituloInput").innerText = item[1].titulo
-                const nuevoRango = crearElemento(cajaIzq, "input")
-
-                const cajaDer = crearElemento(contenedorRango, "span", "cajaDer borderRadiusGrey flexCentrado")
-                const valor = crearElemento(cajaDer, "span", "valorInput flexCentrado")
+                const componente = document.createElement("rango-personalizado")
 
                 Object.entries(item[1]).forEach(([clave, valor]) => {
-                    if (clave in nuevoRango) {
-                        nuevoRango.setAttribute(clave, valor)
+                    if (clave !== "titulo") {
+                        componente.shadowRoot.getElementById("rango").setAttribute(clave, valor)
+                    } else {
+                        componente.shadowRoot.getElementById("titulo").setAttribute(clave, valor)
                     }
                 })
+                seccionActiva.appendChild(componente)
             })
         }
     })
@@ -140,7 +137,7 @@ function cambiarPreset(item = null, num = null) {
 
 function main() {
     dibujarSeccionesConfiguracion("fondo_1")
-    actualizarValores()
+    // actualizarValores()
 
     // dibujarCampoTexto()
     // cambiarPreset()
@@ -159,22 +156,7 @@ function main() {
 
             item.addEventListener("input", () => {
                 actualizarValores()
-                valor.parentElement.style.backgroundColor = "var(--colorEnfasis_1)"
-                valor.parentElement.style.transition = ".2s"
-
-                valor.style.transform = "scale(130%)"
-                valor.style.color= "white"
-                valor.style.transition = ".2s"
             })
-
-            item.addEventListener("mouseleave", () => {
-                valor.parentElement.style.backgroundColor = "white"
-                valor.parentElement.style.transition = ".6s"
-
-                valor.style.transform = "scale(100%)"
-                valor.style.color = "var(--grisTexto)"
-                valor.style.transition = ".2s"
-            })   
         } 
     })
 
